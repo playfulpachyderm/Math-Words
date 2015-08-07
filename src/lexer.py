@@ -59,15 +59,10 @@ MULTIPLIERS = TwoWayDict({
 NUMBERS.update(MULTIPLIERS)
 
 def parse_number(s):
-    nums = str_to_num_array(s)
+    nums = [NUMBERS[x] for x in s.split()]
     tokens = tokenize(nums)
-
     parts = [parse_token(token) * multiplier for multiplier, token in tokens.items()]
     return sum(parts)
-
-def str_to_num_array(s):
-    words = s.split()
-    return [NUMBERS[x] for x in words]
 
 def tokenize(nums):
     # tokenize by powers of 1000 (break into 3 digit parts)
@@ -114,6 +109,9 @@ def evaluate(s):
     return parse_number(s)
 
 def unparse(num):
+    if num == 0:
+        return NUMBERS[num]
+
     s = ""
     part = 0
     multiplier = 1
@@ -124,9 +122,6 @@ def unparse(num):
     return s.strip()
 
 def unparse_part(num):
-    if num == 0:
-        return NUMBERS[num]
-
     hundreds = num // 100
     num %= 100
     teen = num // 10 * 10
