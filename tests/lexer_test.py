@@ -36,9 +36,10 @@ def test_parse_number_can_handle_negatives():
 def test_parse_number_fails_if_given_nonnumber_string():
 	assert_raises(KeyError, parse_number, "fasdf")
 
-def test_reformat_makes_lowercase_and_removes_whitespace_and_ands():
-	str1 = "   FIVE Hundred AND fifty five     "
-	str2 = "five hundred fifty five"
+def test_reformat_makes_lowercase_turns_a_into_one_and_removes_whitespace_and_ands():
+	# update this with "a" into "one" regex
+	str1 = "   a million a thousand FIVE Hundred AND fifty five     "
+	str2 = "one million one thousand five hundred fifty five"
 	assert_equal(reformat(str1), str2)
 
 def test_evaluate_handles_basic_operations():
@@ -47,6 +48,9 @@ def test_evaluate_handles_basic_operations():
 	assert_equal(evaluate("five times six"), 30)
 	assert_equal(evaluate("twenty eight divided by seven"), 4)
 	assert_equal(evaluate("five to the power of three"), 125)
+
+def test_evaluate_handles_repeated_operations():
+	assert_equal(evaluate("five times five times five"), 125)
 
 def test_evaluate_handles_order_of_operations():
 	assert_equal(evaluate("eight minus five plus three"), 6)
@@ -58,9 +62,18 @@ def test_unparse_part():
 	assert_equal(unparse_part(38).strip(), "thirty eight")
 	assert_equal(unparse_part(512).strip(), "five hundred twelve")
 
-def test_unparse():
+def test_unparse_translates_number_to_string():
 	assert_equal(unparse(1500), "one thousand five hundred")
-	assert_equal(unparse(158342), "one hundred fifty eight thousand three hundred forty two")
+	assert_equal(unparse(158000342), "one hundred fifty eight million three hundred forty two")
+
+def test_unparse_handles_zero():
 	assert_equal(unparse(0), "zero")
-	assert_equal(unparse(-1), "negative one")
+
+def test_unparse_handles_multipliers():
+	assert_equal(unparse(1), "one")
+	assert_equal(unparse(1000), "one thousand")
+	assert_equal(unparse(1000000), "one million")
+
+def test_unparse_handles_negatives():
+	assert_equal(unparse(-12), "negative twelve")
 

@@ -96,6 +96,7 @@ def reformat(s):
     s = s.lower().strip()
     for m in MULTIPLIERS:
         s = s.replace("{} and".format(m), str(m))
+    s = re.sub("\\ba\\b", "one", s)
 
     return s
 
@@ -103,22 +104,27 @@ def evaluate(s):
     s = reformat(s)
 
     for o in operators:
-        split = re.split(o[0], s)
+        split = re.split(o[0], s, maxsplit = 1)
         if len(split) > 1:
             return o[1](*[evaluate(x) for x in split])
 
     return parse_number(s)
 
 def unparse(num):
+    if num < 0:
+        return "negative {}".format(unparse(-num))
+
     if num == 0:
         return NUMBERS[num]
 
     s = ""
     part = 0
     multiplier = 1
-    while num > multiplier:
+    while num >= multiplier:
         part = num // multiplier % 1000
-        s = unparse_part(part) + ("{} ".format(NUMBERS[multiplier]) if multiplier != 1 else "") + s
+        if part:
+            prepend = unparse_part(part) + ("{} ".format(NUMBERS[multiplier]) if multiplier != 1 else "")
+            s = prepend + s
         multiplier *= 1000
     return s.strip()
 
