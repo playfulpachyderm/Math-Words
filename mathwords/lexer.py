@@ -1,6 +1,7 @@
 import re
 import math
-from two_way_dict import TwoWayDict
+from .two_way_dict import TwoWayDict
+
 
 def plus(a, b):     return a + b
 def minus(a, b):    return a - b

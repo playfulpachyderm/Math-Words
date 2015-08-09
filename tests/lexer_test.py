@@ -1,5 +1,5 @@
-from lexer import *
 from nose.tools import *
+from mathwords.lexer import *
 
 # ============ Words to numbers ============
 
