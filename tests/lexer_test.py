@@ -19,10 +19,20 @@ def test_tokenize_fails_on_multiple_values_for_same_power():
 def test_parse_token():
 	# without hundreds
 	assert_equal(parse_token([40, 3]), 43)
+	assert_equal(parse_token([30, 0]), 30)
 
 	# with hundreds
 	assert_equal(parse_token([5, 100, 40, 3]), 543)
 
+def test_parse_token_fails_if_given_invalid_numbers():
+	assert_raises(ValueError, parse_token, [3, 5])   # multiple of the same digit
+	assert_raises(ValueError, parse_token, [3, 40])  # out of order
+
+def test_parse_number_helper():
+	assert_equal(helper(528), 2)
+	assert_equal(helper(84), 1)
+	assert_equal(helper(3), 0)
+	assert_equal(helper(0), 0)
 
 def test_parse_number_translates_string_to_number():
 	assert_equal(parse_number("forty three million three hundred five"), 43000305)
@@ -36,14 +46,16 @@ def test_parse_number_can_handle_negatives():
 def test_parse_number_fails_if_given_nonnumber_string():
 	assert_raises(KeyError, parse_number, "fasdf")
 
-def test_reformat_makes_lowercase_turns_a_into_one_and_removes_whitespace_and_ands():
-	# update this with "a" into "one" regex
+#TODO: update this with "a" into "one" regex
+def test_reformat():
+	# should strip whitespace, remove "and"s, turn "a"
+	# into "one", and change to lowercase
 	str1 = "   a million a thousand FIVE Hundred AND fifty five     "
 	str2 = "one million one thousand five hundred fifty five"
 	assert_equal(reformat(str1), str2)
 
 def test_evaluate_handles_basic_operations():
-	assert_equal(evaluate("three plus eight"), 11)
+	assert_equal(evaluate("three added to eight"), 11)
 	assert_equal(evaluate("twenty three minus four"), 19)
 	assert_equal(evaluate("five times six"), 30)
 	assert_equal(evaluate("twenty eight divided by seven"), 4)

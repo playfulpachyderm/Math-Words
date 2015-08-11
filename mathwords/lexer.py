@@ -11,7 +11,7 @@ def exp(a, b):      return a ** b
 
 operators = [
     # reverse order of BEDMAS since evaluated recursively
-    ("plus", plus),
+    ("(?:plus)|(?:added to)", plus),
     ("(?:minus)|(?:subtract)", minus),
     ("(?:times)|(?:multiplied by)", multiply),
     ("(?:divided by)|(?:over)", divide),
@@ -50,11 +50,19 @@ NUMBERS = TwoWayDict({
 })
 
 MULTIPLIERS = TwoWayDict({
-    "hundred":  100,
-    "thousand": 1000,
-    "million":  1000000,
-    "billion":  1000000000,
-    "trillion": 1000000000000,
+    "hundred":      100,
+    "thousand":     1000,
+    "million":      1000000,
+    "billion":      1000000000,
+    "trillion":     1000000000000,
+    "quadrillion":  1000000000000000,
+    "quintillion":  1000000000000000000,
+    "sextillion":   1000000000000000000000,
+    "septillion":   1000000000000000000000000,
+    "octillion":    1000000000000000000000000000,
+    "nonillion":    1000000000000000000000000000000,
+    "decillion":    1000000000000000000000000000000000,
+    # ...
 })
 
 NUMBERS.update(MULTIPLIERS)
@@ -84,11 +92,32 @@ def tokenize(nums):
         tokens[1] = nums[i:j]
     return tokens
 
+def helper(num):
+    # helper for the parse_token method
+    if num == 0:
+        # in accordance with numbers like "thirty zero", 0 is a 1's digit
+        return 0
+    return math.floor(math.log10(num))
+
 def parse_token(token):
-    # sums the token, with one caveat
+    # sums the token, with one caveat for 100s
     if len(token) > 1 and token[1] == 100:
         # numbers before "hundred" are multiplied, like: "five hundred"
         token[0:2] = [token[0] * token[1]]
+
+    # there should be at most 3 digits
+    if len(token) > 3:
+        raise ValueError
+
+    # digits should be presented in order
+    if token != sorted(token, reverse = True):
+        raise ValueError
+
+    # check for duplicate digits like "forty thirty" or "three five"
+    mirror = [helper(t) for t in token]
+    if len(mirror) != len(set(mirror)):  # contains duplicates
+        raise ValueError
+
     return sum(token)
 
 def reformat(s):
@@ -105,7 +134,7 @@ def evaluate(s):
 
     for o in operators:
         split = re.split(o[0], s, maxsplit = 1)
-        if len(split) > 1:
+        if len(split) > 1:  # found an occurrence
             return o[1](*[evaluate(x) for x in split])
 
     return parse_number(s)
