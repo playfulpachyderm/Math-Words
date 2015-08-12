@@ -10,7 +10,17 @@ def exp(a, b):      return a ** b
 
 ARBITRARY_AMOUNT = 5  # arbitrarily chose five decimal places
 
-operators = [
+unary_operators = [
+    ("(?:natural )?log(?:arithm)?", lambda x: math.log(x)),  # no second arg
+    ("common log(?:arithm)?", math.log10),
+    #TODO: possibly add support for logs with arbitrary base?
+    ("sine?", math.sin),
+    ("cos(?:ine)?", math.cos),
+    ("tan(?:gent)?", math.tan),
+    ("(?:square )?root", math.sqrt)
+]
+
+binary_operators = [
     # reverse order of BEDMAS since evaluated recursively
     ("(?:plus)|(?:added to)", plus),
     ("(?:minus)|(?:subtract)", minus),
@@ -133,10 +143,15 @@ def reformat(s):
 def evaluate(s):
     s = reformat(s)
 
-    for o in operators:
+    for o in binary_operators:
         split = re.split(o[0], s, maxsplit = 1)
         if len(split) > 1:  # found an occurrence
             return o[1](*[evaluate(x) for x in split])
+
+    for o in unary_operators:
+        split = re.split("^(?:the )?{regex}(?: of)?".format(regex = o[0]), s, maxsplit = 1)
+        if len(split) > 1:  # found one
+            return o[1](evaluate(split[1]))
 
     return parse_number(s)
 
