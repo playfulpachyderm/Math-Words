@@ -4,4 +4,4 @@ while True:
     try:
         print(">> " + unparse(evaluate(input("expr: "))))
     except Exception as e:
-    	print("(error) {}".format(" ".join(e.args)))
+        print("({}) {}".format(type(e).__name__, " ".join(e.args)))
