@@ -2,12 +2,13 @@ import re
 import math
 from .two_way_dict import TwoWayDict
 
-
 def plus(a, b):     return a + b
 def minus(a, b):    return a - b
 def multiply(a, b): return a * b
 def divide(a, b):   return a / b
 def exp(a, b):      return a ** b
+
+ARBITRARY_AMOUNT = 5  # arbitrarily chose five decimal places
 
 operators = [
     # reverse order of BEDMAS since evaluated recursively
@@ -143,18 +144,27 @@ def unparse(num):
     if num < 0:
         return "negative {}".format(unparse(-num))
 
-    if num == 0:
-        return NUMBERS[num]
-
+    whole_part = int(num)
+    frac_part = round(num - whole_part, ARBITRARY_AMOUNT)
     s = ""
+
+    if whole_part == 0:
+        s = "{} ".format(NUMBERS[whole_part])
+
     part = 0
     multiplier = 1
-    while num >= multiplier:
-        part = num // multiplier % 1000
+    while whole_part >= multiplier:
+        part = whole_part // multiplier % 1000
         if part:
             prepend = unparse_part(part) + ("{} ".format(NUMBERS[multiplier]) if multiplier != 1 else "")
             s = prepend + s
         multiplier *= 1000
+
+    if frac_part:
+        s += "point "
+        for i in str(frac_part).split(".")[-1]:
+            s += "{} ".format(NUMBERS[int(i)])
+
     return s.strip()
 
 def unparse_part(num):

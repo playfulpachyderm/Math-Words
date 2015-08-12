@@ -89,3 +89,7 @@ def test_unparse_handles_multipliers():
 def test_unparse_handles_negatives():
 	assert_equal(unparse(-12), "negative twelve")
 
+def test_unparse_handles_decimals():
+	# will require changing if lexer.ARBITRARY_AMOUNT changes
+	assert_equal(unparse(5/3), "one point six six six six seven")
+	assert_equal(unparse(0.1), "zero point one")
