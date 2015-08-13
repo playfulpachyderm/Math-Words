@@ -142,18 +142,18 @@ def reformat(s):
 
     return s
 
-def evaluate(s):
+def parse(s):
     s = reformat(s)
 
     for o in binary_operators:
         split = re.split(o[0], s, maxsplit = 1)
         if len(split) > 1:  # found an occurrence
-            return o[1](*[evaluate(x) for x in split])
+            return o[1](*[parse(x) for x in split])
 
     for o in unary_operators:
         split = re.split("^(?:the )?{regex}(?: of)?".format(regex = o[0]), s, maxsplit = 1)
         if len(split) > 1:  # found one
-            return o[1](evaluate(split[1]))
+            return o[1](parse(split[1]))
 
     return parse_number(s)
 
@@ -202,3 +202,8 @@ def unparse_part(num):
     if digit:
         s += "{} ".format(NUMBERS[digit])
     return s
+
+# convenience method
+# although to attain true Mathwords, this should be the only visible method
+def evaluate(s):
+    return unparse(parse(s))

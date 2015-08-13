@@ -54,31 +54,31 @@ def test_reformat():
 	str2 = "one octillion one million one thousand five hundred fifty five"
 	assert_equal(reformat(str1), str2)
 
-def test_evaluate_handles_basic_operations():
-	assert_equal(evaluate("three added to eight"), 11)
-	assert_equal(evaluate("twenty three minus four"), 19)
-	assert_equal(evaluate("five times six"), 30)
-	assert_equal(evaluate("twenty eight divided by seven"), 4)
-	assert_equal(evaluate("five to the power of three"), 125)
+def test_parse_handles_basic_operations():
+	assert_equal(parse("three added to eight"), 11)
+	assert_equal(parse("twenty three minus four"), 19)
+	assert_equal(parse("five times six"), 30)
+	assert_equal(parse("twenty eight divided by seven"), 4)
+	assert_equal(parse("five to the power of three"), 125)
 
-def test_evaluate_handles_repeated_operations():
-	assert_equal(evaluate("five times five times five"), 125)
+def test_parse_handles_repeated_operations():
+	assert_equal(parse("five times five times five"), 125)
 
-def test_evaluate_handles_order_of_operations():
-	assert_equal(evaluate("eight minus five plus three"), 6)
-	assert_equal(evaluate("ten divided by two plus three"), 8)
+def test_parse_handles_order_of_operations():
+	assert_equal(parse("eight minus five plus three"), 6)
+	assert_equal(parse("ten divided by two plus three"), 8)
 
-def test_evaluate_handles_unary_operators():
-	assert_equal(evaluate("log twelve"), math.log(12))
-	assert_equal(evaluate("common log of a billion"), 9)
-	assert_equal(evaluate("sine of one"), math.sin(1))
-	assert_equal(evaluate("cos of four"), math.cos(4))
-	assert_equal(evaluate("tan six"), math.tan(6))
-	assert_equal(evaluate("square root of sixteen"), 4)
+def test_parse_handles_unary_operators():
+	assert_equal(parse("log twelve"), math.log(12))
+	assert_equal(parse("common log of a billion"), 9)
+	assert_equal(parse("sine of one"), math.sin(1))
+	assert_equal(parse("cos of four"), math.cos(4))
+	assert_equal(parse("tan six"), math.tan(6))
+	assert_equal(parse("square root of sixteen"), 4)
 
-def test_evaluate_handles_complex_expressions_with_unary_operators():
+def test_parse_handles_complex_expressions_with_unary_operators():
 	str1 = "common log of one hundred to the power of the square root of nine"
-	assert_equal(evaluate(str1), 8)
+	assert_equal(parse(str1), 8)
 
 # ============ Numbers to words ============
 
