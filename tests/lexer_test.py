@@ -51,8 +51,8 @@ def test_parse_number_fails_if_given_nonnumber_string():
 def test_reformat():
 	# should strip whitespace, remove "and"s, turn "a"
 	# into "one", and change to lowercase
-	str1 = "   a million a thousand FIVE Hundred AND fifty five     "
-	str2 = "one million one thousand five hundred fifty five"
+	str1 = "   an octillion a million a thousand FIVE Hundred AND fifty five     "
+	str2 = "one octillion one million one thousand five hundred fifty five"
 	assert_equal(reformat(str1), str2)
 
 def test_evaluate_handles_basic_operations():

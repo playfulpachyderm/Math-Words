@@ -136,7 +136,9 @@ def reformat(s):
     s = s.lower().strip()
     for m in MULTIPLIERS:
         s = s.replace("{} and".format(m), str(m))
-    s = re.sub("\\ba\\b", "one", s)
+
+    # we don't enforce "proper" use of "a" vs "an" because people can have accents
+    s = re.sub("\\ban?\\b", "one", s)
 
     return s
 
