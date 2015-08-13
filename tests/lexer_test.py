@@ -47,7 +47,6 @@ def test_parse_number_can_handle_negatives():
 def test_parse_number_fails_if_given_nonnumber_string():
 	assert_raises(KeyError, parse_number, "fasdf")
 
-#TODO: update this with "a" into "one" regex
 def test_reformat():
 	# should strip whitespace, remove "and"s, turn "a"
 	# into "one", and change to lowercase

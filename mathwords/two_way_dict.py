@@ -1,9 +1,10 @@
 class TwoWayDict(dict):
-	def __init__(self, d):
+	def __init__(self, d = None):
 		super().__init__()
-		for key, value in d.items():
-			self[key] = value
-			self[value] = key
+		if d:
+			for key, value in d.items():
+				self[key] = value
+				self[value] = key
 
 	def __setitem__(self, key, value):
 		if key in self:
