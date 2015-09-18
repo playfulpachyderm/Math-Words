@@ -44,6 +44,17 @@ def test_parse_number_can_handle_zero():
 def test_parse_number_can_handle_negatives():
 	assert_equal(parse_number("twenty one"), 21)
 
+def test_parse_number_can_handle_floats():
+	assert_equal(parse_number("thirteen point five eight two"), 13.582)
+	assert_equal(parse_number("zero point three"), 0.3)
+	assert_equal(parse_number("point six"), 0.6)
+	assert_equal(parse_number("point zero"), 0)
+
+def test_parse_number_rejects_trailing_points():
+	assert_raises(ValueError, parse_number, "point")
+	assert_raises(ValueError, parse_number, "zero point")
+	assert_raises(ValueError, parse_number, "five point")
+
 def test_parse_number_fails_if_given_nonnumber_string():
 	assert_raises(KeyError, parse_number, "fasdf")
 

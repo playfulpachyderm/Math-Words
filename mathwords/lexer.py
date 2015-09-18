@@ -79,10 +79,45 @@ MULTIPLIERS = TwoWayDict({
 NUMBERS.update(MULTIPLIERS)
 
 def parse_number(s):
+    split = re.split("\\bpoint\\b", s)
+    if len(split) > 2:
+        raise ValueError("Too many occurrences of word 'point'")
+
+    whole_part = split[0].strip() or None
+    frac_part = split[1].strip() if len(split) > 1 else None
+
+    if not whole_part and not frac_part:
+        raise ValueError("No input")
+
+    return parse_whole_part(whole_part) + parse_frac_part(frac_part)
+
+def parse_whole_part(s):
+    if not s:
+        return 0
+
     nums = [NUMBERS[x] for x in s.split()]
     tokens = tokenize(nums)
     parts = [parse_token(token) * multiplier for multiplier, token in tokens.items()]
+
     return sum(parts)
+
+
+def parse_frac_part(s):
+    if s is None:
+        return 0
+
+    if len(s) == 0:
+        raise ValueError("Invalid trailing 'point'")
+
+    frac = "0."
+    for digit in s.split():
+        val = NUMBERS[digit]
+        if val > 9:
+            raise ValueError("Decimal input only plz")
+        frac += str(val)
+
+    return float(frac)
+
 
 def tokenize(nums):
     # tokenize by powers of 1000 (break into 3 digit parts)
