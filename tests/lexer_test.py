@@ -65,6 +65,9 @@ def test_reformat():
 	str2 = "one octillion one million one thousand five hundred fifty five"
 	assert_equal(reformat(str1), str2)
 
+def test_parse_rejects_empty_number():
+	assert_raises(ValueError, parse, "")
+
 def test_parse_handles_basic_operations():
 	assert_equal(parse("three added to eight"), 11)
 	assert_equal(parse("twenty three minus four"), 19)
@@ -116,3 +119,4 @@ def test_unparse_handles_decimals():
 	# will require changing if lexer.ARBITRARY_AMOUNT changes
 	assert_equal(unparse(5/3), "one point six six six six seven")
 	assert_equal(unparse(0.1), "zero point one")
+	assert_equal(unparse(0.99999999), "one")

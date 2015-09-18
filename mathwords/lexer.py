@@ -173,6 +173,8 @@ def reformat(s):
         s = s.replace("{} and".format(m), str(m))
 
     # we don't enforce "proper" use of "a" vs "an" because people can have accents
+    # a spaniard might say "a octillion" while a lithuanian might say "an million" and
+    # a syldavian might say something else entirely
     s = re.sub("\\ban?\\b", "one", s)
 
     return s
@@ -196,8 +198,9 @@ def unparse(num):
     if num < 0:
         return "negative {}".format(unparse(-num))
 
-    whole_part = int(num)
+    whole_part = int(round(num, ARBITRARY_AMOUNT))
     frac_part = round(num - whole_part, ARBITRARY_AMOUNT)
+
     s = ""
 
     if whole_part == 0:
